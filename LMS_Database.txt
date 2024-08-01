@@ -1,0 +1,325 @@
+CREATE DATABASE LMSDB;
+SHOW DATABASES;
+USE LMSDB;
+create table user_details (
+id int auto_increment primary key ,
+email varchar(255),
+first_name varchar(255),
+last_name varchar(255),
+password varchar(255),
+contact varchar(255),
+verified varchar(255),
+creator_stamp varchar(255),
+creater_user varchar(255)
+ );
+
+create table user_details (
+id int auto_increment primary key ,
+email varchar(255),
+first_name varchar(255),
+last_name varchar(255),
+password varchar(255),
+contact varchar(255),
+verified varchar(255),
+creator_stamp varchar(255),
+creater_user varchar(255)
+ );
+
+CREATE TABLE hired_candidate (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255),
+    first_name VARCHAR(255),
+    middle_name VARCHAR(255),
+    last_name VARCHAR(255),
+    hired_city VARCHAR(255),
+    degree VARCHAR(255),  
+    hired_date DATE,
+    mobile_number VARCHAR(255),
+    permanent_number VARCHAR(255),  
+    hired_lab VARCHAR(255),
+    attitude VARCHAR(255),  
+    communication_remark VARCHAR(255),
+    knowledge_remark VARCHAR(255),
+    aggregate_remark VARCHAR(255),
+    status VARCHAR(255),
+    creator_stamp DATETIME,
+    creator_user INT,  
+    FOREIGN KEY (creator_user) REFERENCES user_details(id)
+);
+
+
+CREATE TABLE Fellowship_Candidate (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    CIC_ID VARCHAR(255),
+    First_Name VARCHAR(255),
+    Middle_Name VARCHAR(255),
+    Last_Name VARCHAR(255),
+    EmailId VARCHAR(255),
+    Hired_City VARCHAR(255),
+    Degree VARCHAR(255),
+    Hired_Date DATE,
+    Mobile_Number VARCHAR(255),
+    Permanent_Pincode VARCHAR(255),
+    Hired_Lab VARCHAR(255),
+    Attitude VARCHAR(255),
+    Communication_Remark VARCHAR(255),
+    Knowledge_Remark VARCHAR(255),
+    Aggregate_Remark VARCHAR(255),
+    Creator_Stamp DATETIME,
+    Creator_User VARCHAR(255),
+    Birth_Date DATE,
+    Is_Birth_Date_Verified VARCHAR(255),
+    Parent_Name VARCHAR(255),
+    Parent_Occupation VARCHAR(255),
+    Parents_Mobile_Number VARCHAR(255),
+    Parents_Annual_Salary VARCHAR(255),
+    Local_Address TEXT,
+    Permanent_Address TEXT,
+    Photo_Path VARCHAR(255),
+    Joining_Date DATE,
+    Candidate_Status VARCHAR(255),
+    Personal_Information TEXT,
+    Bank_Information TEXT,
+    Educational_Information TEXT,
+    Document_Status TEXT,
+    Remark TEXT,
+    foreign key(id) references hired_candidate(id)
+);
+
+CREATE TABLE candidate_bank_details (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    candidate_id INT,
+    name VARCHAR(255),
+    account_number VARCHAR(255),
+    is_account_num_verified VARCHAR(255),
+    ifsc_code VARCHAR(255),
+    is_ifsc_code_verified VARCHAR(255),
+    pan_number VARCHAR(255),
+    is_pan_number_verified VARCHAR(255),
+    aadhaar_num VARCHAR(255),
+    is_aadhaar_num_verified VARCHAR(255),
+    creator_stamp VARCHAR(255),
+    creator_user INT(255),
+    foreign key (Candidate_Id) references Fellowship_Candidate(Id),
+    foreign key (creator_User) references user_details(id)
+    
+);
+CREATE TABLE candidate_qualification (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    candidate_id INT,
+    diploma VARCHAR(255),
+    degree_name VARCHAR(255),
+    is_degree_name_verified VARCHAR(255),
+    employee_discipline VARCHAR(255),
+    is_employee_discipline_verified VARCHAR(255),
+    passing_year INT,
+    is_passing_year_verified VARCHAR(255),
+    aggr_per DECIMAL(5, 2),
+    is_aggr_per_verified VARCHAR(255),
+    final_year_per DECIMAL(5, 2),
+    is_final_year_per_verified VARCHAR(255),
+    training_institute VARCHAR(255),
+    is_training_institute_verified VARCHAR(255),
+    training_duration_month INT,
+    is_training_duration_month_verified VARCHAR(255),
+    other_training VARCHAR(255),
+    is_other_training_verified VARCHAR(255),
+    creator_stamp TIMESTAMP,
+    creator_user INT,
+    FOREIGN KEY (candidate_id) REFERENCES fellowship_candidate(id),
+    FOREIGN KEY (creator_user) REFERENCES user_details(id)
+);
+CREATE TABLE candidate_documents (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    candidate_id INT,
+    doc_type VARCHAR(255),
+    doc_path VARCHAR(255),
+    status VARCHAR(255),
+    creator_stamp TIMESTAMP,
+    creator_user INT,
+    FOREIGN KEY (candidate_id) REFERENCES fellowship_candidate(id),
+    FOREIGN KEY (creator_user) REFERENCES user_details(id)
+);
+CREATE TABLE company (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255),
+    address VARCHAR(255),
+    location VARCHAR(255),
+    status VARCHAR(255),
+    creator_stamp TIMESTAMP,
+    creator_user INT,
+    UNIQUE KEY unique_name (name), 
+    FOREIGN KEY (creator_user) REFERENCES user_details(id)
+);
+CREATE TABLE tech_stack (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    tech_name VARCHAR(255),
+    image_path VARCHAR(255),
+    framework VARCHAR(255),
+    cur_status VARCHAR(255),
+    creator_stamp TIMESTAMP,
+    creator_user INT,
+    UNIQUE KEY unique_tech_name (tech_name), 
+    FOREIGN KEY (creator_user) REFERENCES user_details(id)
+);
+CREATE TABLE tech_type (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    type_name VARCHAR(255),
+    cur_status VARCHAR(255),
+    creator_stamp TIMESTAMP,
+    creator_user INT,
+    UNIQUE KEY unique_type_name (type_name), 
+    FOREIGN KEY (creator_user) REFERENCES user_details(id)
+);
+CREATE TABLE maker_program (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    program_name VARCHAR(255),
+    program_type VARCHAR(255),
+    program_link VARCHAR(255),
+    tech_stack_id INT,
+    tech_type_id INT,
+    is_program_approved VARCHAR(255),
+    description TEXT,
+    status VARCHAR(255),
+    creator_stamp TIMESTAMP,
+    creator_user INT,
+    FOREIGN KEY (tech_stack_id) REFERENCES tech_stack(id),
+    FOREIGN KEY (tech_type_id) REFERENCES tech_type(id),
+    FOREIGN KEY (creator_user) REFERENCES user_details(id)
+);
+CREATE TABLE lab (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255),
+    location VARCHAR(255),
+    address VARCHAR(255),
+    status VARCHAR(255),
+    creator_stamp TIMESTAMP,
+    creator_user INT,
+    UNIQUE KEY unique_name_location (name, location), 
+    FOREIGN KEY (creator_user) REFERENCES user_details(id)
+);
+CREATE TABLE mentor (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255),
+    mentor_type VARCHAR(255),
+    lab_id INT,
+    status VARCHAR(255),
+    creator_stamp TIMESTAMP,
+    creator_user INT,
+    FOREIGN KEY (lab_id) REFERENCES lab(id),
+    FOREIGN KEY (creator_user) REFERENCES user_details(id)
+);
+CREATE TABLE mentor_tech_stack (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    mentor_id INT,
+    tech_stack_id INT,
+    status VARCHAR(255),
+    creator_stamp TIMESTAMP,
+    creator_user INT,
+    FOREIGN KEY (mentor_id) REFERENCES mentor(id),
+    FOREIGN KEY (tech_stack_id) REFERENCES tech_stack(id),
+    FOREIGN KEY (creator_user) REFERENCES user_details(id)
+);
+
+CREATE TABLE mentor_ideation_map (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    parent_mentor_id INT,
+    mentor_id INT,
+    status VARCHAR(255),
+    creator_stamp TIMESTAMP,
+    creator_user INT,
+    FOREIGN KEY (parent_mentor_id) REFERENCES mentor(id),
+    FOREIGN KEY (mentor_id) REFERENCES mentor(id),
+    FOREIGN KEY (creator_user) REFERENCES user_details(id)
+);
+CREATE TABLE lab_threshold (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    lab_id INT,
+    lab_capacity INT,
+    lead_threshold INT,
+    ideation_engg_threshold INT,
+    buddy_engg_threshold INT,
+    status VARCHAR(255),
+    creator_stamp TIMESTAMP,
+    creator_user INT,
+    FOREIGN KEY (lab_id) REFERENCES lab(id),
+    FOREIGN KEY (creator_user) REFERENCES user_details(id)
+);
+
+CREATE TABLE company_requirement (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    company_id INT,
+    requested_month VARCHAR(255),
+    city VARCHAR(255),
+    is_doc_verification VARCHAR(255),
+    requirement_doc_path VARCHAR(255),
+    no_of_engg INT,
+    tech_stack_id INT,
+    tech_type_id INT,
+    maker_program_id INT,
+    lead_id INT,
+    ideation_engg_id INT,
+    buddy_engg_id INT,
+    special_remark TEXT,
+    status VARCHAR(255),
+    creator_stamp TIMESTAMP,
+    creator_user INT,
+    FOREIGN KEY (company_id) REFERENCES company(id),
+    FOREIGN KEY (tech_stack_id) REFERENCES tech_stack(id),
+    FOREIGN KEY (tech_type_id) REFERENCES tech_type(id),
+    FOREIGN KEY (maker_program_id) REFERENCES maker_program(id),
+    FOREIGN KEY (lead_id) REFERENCES mentor(id),
+    FOREIGN KEY (ideation_engg_id) REFERENCES mentor(id),
+    FOREIGN KEY (buddy_engg_id) REFERENCES mentor(id),
+    FOREIGN KEY (creator_user) REFERENCES user_details(id)
+);
+CREATE TABLE app_parameters (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    key_type VARCHAR(255),
+    key_value VARCHAR(255),
+    key_text TEXT,
+    cur_status VARCHAR(255),
+    lastupd_user INT,
+    lastupd_stamp TIMESTAMP,
+    creator_stamp TIMESTAMP,
+    creator_user INT,
+    seq_num INT,
+    UNIQUE KEY unique_key_type_value (key_type, key_value),
+    FOREIGN KEY (lastupd_user) REFERENCES user_details(id),
+    FOREIGN KEY (creator_user) REFERENCES user_details(id)
+);
+CREATE TABLE candidate_stack_assignment (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    requirement_id INT,
+    candidate_id INT,
+    assign_date DATE,
+    complete_date DATE,
+    status VARCHAR(255),
+    creator_stamp TIMESTAMP,
+    creator_user INT,
+    FOREIGN KEY (requirement_id) REFERENCES company_requirement(id),
+    FOREIGN KEY (candidate_id) REFERENCES fellowship_candidate(id),
+    FOREIGN KEY (creator_user) REFERENCES user_details(id)
+);
+
+
+show tables;
+
+-------- find all candidate having java technology ----------
+mysql> SELECT Hired_Candidate.*,tech_stack.Tech_Name FROM Hired_Candidate
+    -> LEFT JOIN Tech_Stack
+    -> ON Hired_Candidate.Creator_User = tech_stack.Creator_User
+    -> WHERE tech_stack.Tech_Name = "java";
++----+------------+-------------+-----------+--------------------------+------------+--------+------------+---------------+-------------------+-----------+----------+----------------------+------------------+------------------+----------+---------------------+--------------+-----------+
+| Id | First_Name | Middle_Name | Last_Name | Email_Id                 | Hired_City | Degree | Hired_Date | Mobile_Number | Permanent_Pincode | Hired_Lab | Attitude | Communication_Remark | Knowledge_Remark | Aggregate_Remark | Status   | Creator_Stamp       | Creator_User | Tech_Name |
++----+------------+-------------+-----------+--------------------------+------------+--------+------------+---------------+-------------------+-----------+----------+----------------------+------------------+------------------+----------+---------------------+--------------+-----------+
+|  1 | Anjali     | Ananda      | Patil     | anjalipatil@gmail.com    | Mumbai     | BE-IT  | 2024-04-02 | 8108654596    | 623458            | Mumbai    | Positive | Good                 | Good             | Good             | Accepted | 2024-07-15 16:04:24 |            1 | Java      |
+|  2 | Sakshi     | Shankar     | Jadhav    | sakshijadhav@gmail.com   | Mumbai     | BE-IT  | 2024-05-12 | 9178654596    | 785412            | Mumbai    | Positive | Excellent            | Excellent        | Excellent        | Accepted | 2024-07-15 16:04:24 |            2 | Java      |
+|  4 | Vedant     | Abcd        | Gujarati  | vedantgujarati@gmail.com | Mumbai     | BE-CS  | 2023-06-14 | 7098325648    | 623462            | Mumbai    | Positive | Excellent            | Excellent        | Excellent        | Accepted | 2024-07-15 16:04:24 |            4 | Java      |
+|  5 | Vaibhav    | Abcd        | Kumbhar   | vaibhav15@gmail.com      | Mumbai     | BE-CS  | 2024-01-01 | 7078451296    | 400065            | Mumbai    | Average  | Good                 | Good             | Good             | Accepted | 2024-07-15 16:04:24 |            5 | Java      |
+|  9 | Akash      | Ananda      | Patil     | akash@gmail.com          | Mumbai     | BSC-CS | 2024-04-15 | 9857423899    | 400100            | Mumbai    | Positive | Good                 | Excellent        | Good             | Accepted | 2024-07-15 16:04:24 |            9 | Java      |
++----+------------+-------------+-----------+--------------------------+------------+--------+------------+---------------+-------------------+-----------+----------+----------------------+------------------+------------------+----------+---------------------+--------------+-----------+
+5 rows in set (0.00 sec)
+
+
+
